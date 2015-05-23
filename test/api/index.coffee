@@ -41,4 +41,43 @@ module.exports = ->
             .and.match /^[0-9]+\.[0-9]+\.[0-9]+$/
 
           do done
-          
+
+    describe 'events/', ->
+      describe 'POST', ->
+        it 'requires a date and description'
+
+        it 'stores a new unaccepted event'
+
+        it 'requires user to be authenticated'
+
+      describe 'GET', ->
+        it 'gives a list of all accepted events'
+
+        it 'for moderator gives a list of all events'
+
+
+      describe '1 (event id)/', ->
+        describe 'GET', ->
+          it 'gives all the data of the event'
+
+        describe 'DELETE', ->
+          it 'removes the event'
+
+          it 'can be done only by moderator'
+
+        describe 'vote/', ->
+          describe 'POST', ->
+            it 'increases number of votes'
+
+            it 'won\'t work twice for same event and user'
+
+        describe 'accept/', ->
+          describe 'POST', ->
+            it 'makes the event accepted'
+
+            it 'can be done by moderator only'
+
+          describe 'DELETE', ->
+            it 'makes the event not accepted'
+
+            it 'can be done by moderator only'
