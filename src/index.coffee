@@ -14,6 +14,7 @@ app = new Express
 
 if process.env.NODE_ENV is 'development' then app.enable 'debug'
 
+app.use require './middleware/redis'  
 app.use do cors # TODO: Be more specific with CORS
 app.use require './router'
 app.use (req, res, done) ->
