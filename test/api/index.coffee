@@ -51,33 +51,37 @@ module.exports = ->
         it 'requires user to be authenticated'
 
       describe 'GET', ->
-        it 'gives a list of all accepted events'
 
-        it 'for moderator gives a list of all events'
+        it 'gives a list of all dates with events'
 
-
-      describe '1 (event id)/', ->
+      describe '2015-06-20 (date)/', ->
         describe 'GET', ->
-          it 'gives all the data of the event'
+          it 'gives a list of all accepted events'
 
-        describe 'DELETE', ->
-          it 'removes the event'
+          it 'for moderator gives a list of all events'
 
-          it 'can be done only by moderator'
-
-        describe 'vote/', ->
-          describe 'POST', ->
-            it 'increases number of votes'
-
-            it 'won\'t work twice for same event and user'
-
-        describe 'accept/', ->
-          describe 'POST', ->
-            it 'makes the event accepted'
-
-            it 'can be done by moderator only'
+        describe '1 (event id)/', ->
+          describe 'GET', ->
+            it 'gives all the data of the event'
 
           describe 'DELETE', ->
-            it 'makes the event not accepted'
+            it 'removes the event'
 
-            it 'can be done by moderator only'
+            it 'can be done only by moderator'
+
+          describe 'vote/', ->
+            describe 'POST', ->
+              it 'increases number of votes'
+
+              it 'won\'t work twice for same event and user'
+
+          describe 'accept/', ->
+            describe 'POST', ->
+              it 'makes the event accepted'
+
+              it 'can be done by moderator only'
+
+            describe 'DELETE', ->
+              it 'makes the event not accepted'
+
+              it 'can be done by moderator only'
