@@ -40,11 +40,36 @@ router.route '/'
       do done
 
   .get (req, res, done) ->
-    req.redis
-      .get 'visits'
-      .then (visits) ->
-        res.locals = { visits }
-        do done
-      .catch done
+    {redis} = req
+
+    redis.zrange 'dates', 0, -1, (error, dates) ->
+      if error then return done error
+      res.locals = dates.map (date) -> id: date
+      do done
+
+router.route '/:date'
+  .get (req, res, done) ->
+    {redis} = req
+    {date} = req.params
+
+    redis.zrange "events:#{date}", 0, -1, (error, events) ->
+      if error then return done error
+      res.locals = events.map (event) -> id: event
+      do done
+
+router.route '/:date/:event'
+  .get (req, res, done) ->
+    {redis} = req
+    {
+      date
+      event
+    } = req.params
+
+    # TODO: Check if event matches date
+    # TODO: Get votes
+    redis.hgetall "events:#{event}", (error, event) ->
+      if error then return done error
+      res.locals = event
+      do done
 
 module.exports = router
