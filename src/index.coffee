@@ -17,6 +17,13 @@ if process.env.NODE_ENV is 'development' then app.enable 'debug'
 
 app.use require './middleware/redis'
 app.use body.json extended: yes
+app.use (req, res, done) ->
+  # TODO: Real authentication and session
+  req.user =
+    name  : 'Anonymous User'
+    email : 'user@example.com'
+    role  : 'participant'
+  do done
 app.use do cors # TODO: Be more specific with CORS
 app.use require './router'
 app.use (req, res, done) ->

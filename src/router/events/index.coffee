@@ -14,7 +14,7 @@ router.route '/'
       date
       description
     } = req.body
-    owner = 'Anonymous'
+    owner = req.user.email
 
     # TODO: Validate date (2015-05-24)
     {redis} = req
