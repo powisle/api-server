@@ -3,6 +3,7 @@ Error2    = require 'error2'
 Logdown   = require 'logdown'
 config    = require 'config-object'
 cors      = require 'cors'
+body      = require 'body-parser'
 
 logger    = new Logdown prefix: 'api-server'
 
@@ -14,7 +15,8 @@ app = new Express
 
 if process.env.NODE_ENV is 'development' then app.enable 'debug'
 
-app.use require './middleware/redis'  
+app.use require './middleware/redis'
+app.use body.json extended: yes
 app.use do cors # TODO: Be more specific with CORS
 app.use require './router'
 app.use (req, res, done) ->

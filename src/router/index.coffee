@@ -14,14 +14,6 @@ router.route '/'
     ]
     do done
 
-router.route '/visits'
-  .get (req, res, done) ->
-    req.redis.get 'visits', (error, visits) ->
-      if error then return done error
-      res.locals = { visits }
-      do done
-
-
-# router.use '/events', require './events'
+router.use '/events', require './events'
 
 module.exports = router
