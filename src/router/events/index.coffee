@@ -5,6 +5,7 @@ Error2    = require 'error2'
 
 router = new Express.Router
 
+# Event list router
 
 router.route '/'
   # Add new event
@@ -85,9 +86,6 @@ router.route '/:date'
     res.locals = req.events
     do done
 
-router.route '/:date/:event'
-  .get (req, res, done) ->
-    res.locals = req.event
-    do done
+router.use '/:date/:event', require './single'
 
 module.exports = router
