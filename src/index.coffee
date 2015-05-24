@@ -31,7 +31,6 @@ app.use (req, res, done) ->
     path    : req.path
 
   logger.log "*#{req.method}\t#{req.path}* 200 OK" if app.enabled 'logs'
-
   res.json res.locals
 
 app.use (error, req, res, done) ->

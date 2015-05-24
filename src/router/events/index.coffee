@@ -1,6 +1,7 @@
 Express   = require 'express'
 config    = require 'config-object'
 async     = require 'async'
+Error2    = require 'error2'
 
 router = new Express.Router
 
@@ -47,29 +48,46 @@ router.route '/'
       res.locals = dates.map (date) -> id: date
       do done
 
+router.param 'date', (req, res, done, date) ->
+  {redis} = req
+
+  async.waterfall [
+    (done) -> redis.zrange "events:#{date}", 0, -1, done
+    (events, done) ->
+      req.date    = date
+      async.map events,
+        (id, done) ->
+          redis.hgetall "events:#{id}", (error, event) ->
+            if error then return done error
+            event.id = id
+            done error, event
+        done
+  ], (error, events) ->
+    if error then return done error
+    req.events = events
+
+    do done
+
+router.param 'event', (req, res, done, id) ->
+  req.event = req.events
+    .filter (event) -> event.id is id
+    .pop()
+
+  if not req.event then return done new Error2
+    status  : 404
+    name    : 'NotFound'
+    message : 'Event not found'
+
+  do done
+
 router.route '/:date'
   .get (req, res, done) ->
-    {redis} = req
-    {date} = req.params
-
-    redis.zrange "events:#{date}", 0, -1, (error, events) ->
-      if error then return done error
-      res.locals = events.map (event) -> id: event
-      do done
+    res.locals = req.events
+    do done
 
 router.route '/:date/:event'
   .get (req, res, done) ->
-    {redis} = req
-    {
-      date
-      event
-    } = req.params
-
-    # TODO: Check if event matches date
-    # TODO: Get votes
-    redis.hgetall "events:#{event}", (error, event) ->
-      if error then return done error
-      res.locals = event
-      do done
+    res.locals = req.event
+    do done
 
 module.exports = router
